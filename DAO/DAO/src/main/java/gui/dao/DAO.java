@@ -11,6 +11,7 @@ public abstract class DAO <T, K>{
     
     public abstract T findById(K id) throws DAOException;
     public abstract List<T> findAll(boolean solaActivos) throws DAOException;
+    public abstract List<T> findAllByEstado(boolean solaActivos) throws DAOException;
     
     public abstract boolean exist(K id) throws DAOException;
     

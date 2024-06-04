@@ -10,10 +10,6 @@ import gui.persona.PersonaException;
 import java.sql.Date;
 import java.time.LocalDate;
 
-/**
- *
- * @author Nataly
- */
 public class AlumnoUtils {
     
     public static Alumno str2Alu(String aluStr) throws PersonaException {

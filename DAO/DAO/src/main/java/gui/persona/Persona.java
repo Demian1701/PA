@@ -12,7 +12,7 @@ import java.time.LocalDate;
  */
 public class Persona {
 
-   public static final char DELIM = '\t';
+   public static final char DELIM = '\t'; // Caracter de tabulación
     
     private int dni;
     private String nombre;

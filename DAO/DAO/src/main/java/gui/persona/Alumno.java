@@ -47,6 +47,7 @@ public class Alumno extends Persona {
         this.promedio = promedio;
         setFechaIng(fechaIng);
         this.carreras = carreras;
+        this.estado = estado;
     }
 
     public char getEstado() {
@@ -108,4 +109,5 @@ public class Alumno extends Persona {
     public String toString() {
         return super.toString() + Persona.DELIM + estado;
     }
+    
 }
