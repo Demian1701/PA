@@ -7,6 +7,7 @@ package gui.daotest;
 import gui.dao.DAO;
 import gui.dao.DAOTXT;
 import gui.dao.DAOException;
+import gui.dao.DAOSQL;
 import gui.persona.Alumno;
 import gui.persona.Carrera;
 import gui.persona.PersonaException;
@@ -24,8 +25,9 @@ public class DAOTest {
 
     public static void main(String[] args) throws PersonaException {
         try {
-            DAO dao = new DAOTXT("alumnos.txt");
-            
+            //DAO dao = new DAOTXT("alumnos.txt");
+            DAO dao = new DAOSQL("jdbc:mysql://127.0.0.1:3306/universidad", "root", "root");
+
             LocalDate fechaNac = LocalDate.of(2000, 6, 14);
             LocalDate fechaIngreso = LocalDate.of(2020, 6, 20);
             List<Carrera> carreras = new ArrayList<>();

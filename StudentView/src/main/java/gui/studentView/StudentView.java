@@ -2,10 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package studentView;
+package gui.studentView;
 
 import gui.dao.DAO;
 import gui.dao.DAOException;
+import gui.dao.DAOSQL;
 import gui.dao.DAOTXT;
 import gui.persona.Alumno;
 import java.awt.List;
@@ -20,9 +21,12 @@ import javax.swing.JOptionPane;
  *
  * @author fiora
  */
+
+
 public class StudentView extends javax.swing.JFrame {
 
     private DAO dao;
+    private DAO daoSQL;
     private Alumno alumno;
     private ArrayList<Alumno> alumnosList;
 
@@ -35,6 +39,8 @@ public class StudentView extends javax.swing.JFrame {
         this.setTitle("Student view");
         //Alumno alumno = new Alumno();
         dao = new DAOTXT("alumnos.txt");
+        daoSQL = new DAOSQL("jdbc:mysql://127.0.0.1:3306/universidad", "root", "root");
+        
         jTextFieldName.setVisible(false);
         jLabelName.setVisible(false);
         jTextFieldLastName.setVisible(false);
@@ -73,6 +79,7 @@ public class StudentView extends javax.swing.JFrame {
         jLabelState = new javax.swing.JLabel();
         jButtonUpdate = new javax.swing.JButton();
         jLabelFN = new javax.swing.JLabel();
+        jButtonBuscarSQL = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -130,12 +137,19 @@ public class StudentView extends javax.swing.JFrame {
 
         jLabelFN.setText("FN");
 
+        jButtonBuscarSQL.setText("BuscarSQL");
+        jButtonBuscarSQL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarSQLActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 31, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
@@ -158,18 +172,22 @@ public class StudentView extends javax.swing.JFrame {
                                 .addGap(102, 102, 102)
                                 .addComponent(jButtonModify)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addComponent(jButtonFindAll)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jButton1))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jComboBoxState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabelFN)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButtonUpdate)))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jButtonFindAll)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jComboBoxState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabelFN)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButtonUpdate)))))
+                                .addGap(110, 110, 110)
+                                .addComponent(jButtonBuscarSQL)))))
                 .addGap(27, 27, 27))
         );
         layout.setVerticalGroup(
@@ -187,7 +205,9 @@ public class StudentView extends javax.swing.JFrame {
                             .addComponent(jButton1)
                             .addComponent(jButtonFindAll)
                             .addComponent(jButtonModify))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonBuscarSQL)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelName)
                     .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -286,6 +306,17 @@ public class StudentView extends javax.swing.JFrame {
         jTextAreaSelectedStudent.setText(response);                // TODO add your handling code here:
     }//GEN-LAST:event_jButtonModifyActionPerformed
 
+    private void jButtonBuscarSQLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarSQLActionPerformed
+        Integer DNI = Integer.valueOf(jTextFieldDNI.getText());
+        try {
+            alumno = (Alumno) daoSQL.findById(DNI);
+            jTextAreaSelectedStudent.setText(alumno.getNombre());
+        } catch (DAOException ex) {
+            Logger.getLogger(StudentView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+    }//GEN-LAST:event_jButtonBuscarSQLActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -327,6 +358,7 @@ public class StudentView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonBuscarSQL;
     private javax.swing.JButton jButtonFindAll;
     private javax.swing.JButton jButtonModify;
     private javax.swing.JButton jButtonUpdate;
