@@ -10,12 +10,18 @@ package gui.studentView.dialog;
  */
 public class AlumnoDialog extends javax.swing.JDialog {
 
+    public static final String CREATE = "CREATE";
+    public static final String UPDATE = "UPDATE";
+    public static final String READ = "READ";
+
     /**
      * Creates new form AlumnoDialog
      */
-    public AlumnoDialog(java.awt.Frame parent, boolean modal) {
+    public AlumnoDialog(java.awt.Frame parent, boolean modal, String action) {
         super(parent, modal);
         initComponents();
+        this.setLocationRelativeTo(null);
+        this.setTitle("Student dialog");
     }
 
     /**
@@ -73,7 +79,7 @@ public class AlumnoDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AlumnoDialog dialog = new AlumnoDialog(new javax.swing.JFrame(), true);
+                AlumnoDialog dialog = new AlumnoDialog(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

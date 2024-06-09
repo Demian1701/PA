@@ -10,6 +10,7 @@ import gui.dao.DAOSQL;
 import gui.dao.DAOTXT;
 import gui.persona.Alumno;
 import gui.persona.PersonaException;
+import gui.studentView.dialog.AlumnoDialog;
 import java.util.List;
 import java.io.File;
 import java.time.LocalDate;
@@ -63,7 +64,7 @@ public class StudentView extends javax.swing.JFrame {
             DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(initialValues);
             jComboBoxState.setModel(model);
             
-            disableButtons();
+            //disableButtons();
             
             AlumnoTableModel alumnoModel = new AlumnoTableModel();
             
@@ -468,7 +469,9 @@ public class StudentView extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonBuscarSQLActionPerformed
 
     private void jButtonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearActionPerformed
-        // TODO add your handling code here:
+        AlumnoDialog alumnoDIalog = new AlumnoDialog(this, true, AlumnoDialog.CREATE);
+        alumnoDIalog.setVisible(true);
+        System.out.println("");
     }//GEN-LAST:event_jButtonCrearActionPerformed
 
     private void jButtonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarActionPerformed
@@ -476,11 +479,14 @@ public class StudentView extends javax.swing.JFrame {
         if(rowSelected < 0){
             JOptionPane.showMessageDialog(this, "No se ha seleccionado un alumno", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
+        AlumnoDialog alumnoDIalog = new AlumnoDialog(this, true, AlumnoDialog.UPDATE);
+        alumnoDIalog.setVisible(true);
         
     }//GEN-LAST:event_jButtonModificarActionPerformed
 
     private void jButtonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultarActionPerformed
-        // TODO add your handling code here:
+        AlumnoDialog alumnoDIalog = new AlumnoDialog(this, true, AlumnoDialog.READ);
+        alumnoDIalog.setVisible(true);
     }//GEN-LAST:event_jButtonConsultarActionPerformed
 
     private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
