@@ -9,13 +9,19 @@ import gui.dao.DAOException;
 import gui.dao.DAOSQL;
 import gui.dao.DAOTXT;
 import gui.persona.Alumno;
-import java.awt.List;
+import gui.persona.PersonaException;
+import java.util.List;
+import java.io.File;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.FileChooserUI;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -28,31 +34,65 @@ public class StudentView extends javax.swing.JFrame {
     private DAO dao;
     private DAO daoSQL;
     private Alumno alumno;
-    private ArrayList<Alumno> alumnosList;
+    private List<Alumno> alumnosList;
+    private static final int TIPO_TXT = 0;
+    private static final int TIPO_SQL = 1;
 
     /**
      * Creates new form StudentView
      */
     public StudentView() throws DAOException {
-        initComponents();
-        this.setLocationRelativeTo(null);
-        this.setTitle("Student view");
-        //Alumno alumno = new Alumno();
-        dao = new DAOTXT("alumnos.txt");
-        daoSQL = new DAOSQL("jdbc:mysql://127.0.0.1:3306/universidad", "root", "root");
-        
-        jTextFieldName.setVisible(false);
-        jLabelName.setVisible(false);
-        jTextFieldLastName.setVisible(false);
-        jLabelLastName.setVisible(false);
-        jComboBoxState.setVisible(false);
-        jLabelState.setVisible(false);
-        jButtonUpdate.setVisible(false);
-        jLabelFN.setVisible(false);
-        
-        String[] initialValues = {"A", "I"};
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(initialValues);
-        jComboBoxState.setModel(model);
+        try {
+            initComponents();
+            this.setLocationRelativeTo(null);
+            this.setTitle("Student view");
+            //Alumno alumno = new Alumno();
+            dao = new DAOTXT("alumnos.txt");
+            daoSQL = new DAOSQL("jdbc:mysql://127.0.0.1:3306/universidad", "root", "root");
+            
+            jTextFieldName.setVisible(false);
+            jLabelName.setVisible(false);
+            jTextFieldLastName.setVisible(false);
+            jLabelLastName.setVisible(false);
+            jComboBoxState.setVisible(false);
+            jLabelState.setVisible(false);
+            jButtonUpdate.setVisible(false);
+            jLabelFN.setVisible(false);
+            
+            String[] initialValues = {"A", "I"};
+            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(initialValues);
+            jComboBoxState.setModel(model);
+            
+            disableButtons();
+            
+            AlumnoTableModel alumnoModel = new AlumnoTableModel();
+            
+            List<Alumno> alumnos = new ArrayList<>();
+            
+            Alumno alu1 = new Alumno();
+            Alumno alu2 = new Alumno();
+            alumnos.add(alu1);
+            alumnos.add(alu2);
+            
+            alu1.setDni(12345678);
+            alu1.setNombre("Nombre1");
+            alu1.setApellido("Apellido1");
+            alu1.setFechaNac(LocalDate.now());
+            alu1.setEstado('A');
+            
+            alu2.setDni(87654321);
+            alu2.setNombre("Nombre2");
+            alu2.setApellido("Apellido2");
+            alu2.setFechaNac(LocalDate.now().plusDays(45));
+            alu2.setEstado('I');
+            
+            alumnoModel.setAlumnos(alumnos);
+            
+            jTableAlumnos.setModel(alumnoModel);
+            jButtonBorrar.setEnabled(true);
+        } catch (PersonaException ex) {
+            Logger.getLogger(StudentView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -80,6 +120,17 @@ public class StudentView extends javax.swing.JFrame {
         jButtonUpdate = new javax.swing.JButton();
         jLabelFN = new javax.swing.JLabel();
         jButtonBuscarSQL = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableAlumnos = new javax.swing.JTable();
+        jButtonCrear = new javax.swing.JButton();
+        jButtonModificar = new javax.swing.JButton();
+        jButtonConsultar = new javax.swing.JButton();
+        jButtonBorrar = new javax.swing.JButton();
+        jComboBoxFeed = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        jButtonPicker = new javax.swing.JButton();
+        jTextFieldFullPath = new javax.swing.JTextField();
+        jCheckBoxAlumnosActivos = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -144,51 +195,130 @@ public class StudentView extends javax.swing.JFrame {
             }
         });
 
+        jTableAlumnos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTableAlumnos);
+
+        jButtonCrear.setText("Crear");
+        jButtonCrear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCrearActionPerformed(evt);
+            }
+        });
+
+        jButtonModificar.setText("Modificar");
+        jButtonModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonModificarActionPerformed(evt);
+            }
+        });
+
+        jButtonConsultar.setText("Consultar");
+        jButtonConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonConsultarActionPerformed(evt);
+            }
+        });
+
+        jButtonBorrar.setText("Borrar");
+        jButtonBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBorrarActionPerformed(evt);
+            }
+        });
+
+        jComboBoxFeed.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "TXT", "SQL" }));
+        jComboBoxFeed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxFeedActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Seleccione el repositorio");
+
+        jButtonPicker.setText("...");
+        jButtonPicker.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPickerActionPerformed(evt);
+            }
+        });
+
+        jTextFieldFullPath.setEditable(false);
+        jTextFieldFullPath.setBackground(new java.awt.Color(204, 204, 204));
+
+        jCheckBoxAlumnosActivos.setText("Solo activos");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 31, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane2)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 50, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabelName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldName, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelLastName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldLastName, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabelState)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBoxState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabelFN)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addComponent(jButtonUpdate)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(33, 33, 33)
+                        .addComponent(jTextFieldDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(102, 102, 102)
+                        .addComponent(jButtonModify)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jButtonFindAll)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(116, 116, 116)
+                                .addComponent(jButtonBuscarSQL)))
+                        .addGap(27, 27, 27))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelName)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextFieldDNI, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
-                            .addComponent(jTextFieldName))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 513, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabelLastName)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextFieldLastName, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jComboBoxFeed, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButtonPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jScrollPane1)
+                                    .addComponent(jTextFieldFullPath, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabelState))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(102, 102, 102)
-                                .addComponent(jButtonModify)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(6, 6, 6)
-                                    .addComponent(jButtonFindAll)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jButton1))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jComboBoxState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabelFN)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButtonUpdate)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(110, 110, 110)
-                                .addComponent(jButtonBuscarSQL)))))
-                .addGap(27, 27, 27))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButtonModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButtonConsultar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButtonBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButtonCrear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jCheckBoxAlumnosActivos))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,7 +337,7 @@ public class StudentView extends javax.swing.JFrame {
                             .addComponent(jButtonModify))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonBuscarSQL)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelName)
                     .addComponent(jTextFieldName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -217,9 +347,29 @@ public class StudentView extends javax.swing.JFrame {
                     .addComponent(jLabelState)
                     .addComponent(jButtonUpdate)
                     .addComponent(jLabelFN))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxFeed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jButtonPicker))
+                .addGap(18, 18, 18)
+                .addComponent(jTextFieldFullPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBoxAlumnosActivos, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonCrear)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonModificar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonBorrar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonConsultar))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(46, 46, 46))
         );
 
         pack();
@@ -247,7 +397,7 @@ public class StudentView extends javax.swing.JFrame {
     private void jButtonFindAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFindAllActionPerformed
         String response = "";
         try {
-            alumnosList = (ArrayList<Alumno>) dao.findAll(true);
+            alumnosList = (List<Alumno>) dao.findAll(true);
             for (Alumno alumno : alumnosList) {
             // Imprimir los detalles de cada alumno
                 response += alumno.toString()+"\n";
@@ -317,6 +467,64 @@ public class StudentView extends javax.swing.JFrame {
             
     }//GEN-LAST:event_jButtonBuscarSQLActionPerformed
 
+    private void jButtonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonCrearActionPerformed
+
+    private void jButtonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarActionPerformed
+        int rowSelected = jTableAlumnos.getSelectedRow();
+        if(rowSelected < 0){
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado un alumno", "Error", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_jButtonModificarActionPerformed
+
+    private void jButtonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonConsultarActionPerformed
+
+    private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
+        int rowSelected = jTableAlumnos.getSelectedRow();
+        if(rowSelected < 0){
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado un alumno", "Error", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            AlumnoTableModel alumnoTableModel = (AlumnoTableModel)jTableAlumnos.getModel();
+            java.util.List<Alumno> alumnos = alumnoTableModel.getAlumnos();
+            Alumno alumno = alumnos.get(rowSelected);
+            int resp = JOptionPane.showConfirmDialog(this, "¿Está seguro que quiere borrar al alumno con DNI: " + alumno.getDni() + " ?"  ,"Confirmación de borrado",JOptionPane.OK_CANCEL_OPTION);
+            if(resp != JOptionPane.OK_OPTION){
+                return;
+            }
+            System.out.println("Se borra");
+        }
+    }//GEN-LAST:event_jButtonBorrarActionPerformed
+
+    private void jButtonPickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPickerActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        File projectRoot = new File(System.getProperty("user.dir"));
+        chooser.setCurrentDirectory(projectRoot);
+        int resp = chooser.showOpenDialog(this);
+        if (resp !=  JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        jTextFieldFullPath.setText(chooser.getSelectedFile().getAbsolutePath());
+        jButtonCrear.setEnabled(true);
+        jButtonModificar.setEnabled(true);
+    }//GEN-LAST:event_jButtonPickerActionPerformed
+
+    private void jComboBoxFeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxFeedActionPerformed
+        if(jComboBoxFeed.getSelectedIndex()== TIPO_TXT){
+            jTextFieldFullPath.setVisible(true);
+            jButtonPicker.setVisible(true);
+        }
+        else{
+            jTextFieldFullPath.setVisible(false);
+            jButtonPicker.setVisible(false);
+}
+        
+    }//GEN-LAST:event_jComboBoxFeedActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -358,20 +566,39 @@ public class StudentView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonBorrar;
     private javax.swing.JButton jButtonBuscarSQL;
+    private javax.swing.JButton jButtonConsultar;
+    private javax.swing.JButton jButtonCrear;
     private javax.swing.JButton jButtonFindAll;
+    private javax.swing.JButton jButtonModificar;
     private javax.swing.JButton jButtonModify;
+    private javax.swing.JButton jButtonPicker;
     private javax.swing.JButton jButtonUpdate;
+    private javax.swing.JCheckBox jCheckBoxAlumnosActivos;
+    private javax.swing.JComboBox<String> jComboBoxFeed;
     private javax.swing.JComboBox<String> jComboBoxState;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabelFN;
     private javax.swing.JLabel jLabelLastName;
     private javax.swing.JLabel jLabelName;
     private javax.swing.JLabel jLabelState;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTableAlumnos;
     private javax.swing.JTextArea jTextAreaSelectedStudent;
     private javax.swing.JTextField jTextFieldDNI;
+    private javax.swing.JTextField jTextFieldFullPath;
     private javax.swing.JTextField jTextFieldLastName;
     private javax.swing.JTextField jTextFieldName;
     // End of variables declaration//GEN-END:variables
+
+    private void disableButtons() {
+        jButtonCrear.setEnabled(false);
+        jButtonModificar.setEnabled(false);
+        jButtonBorrar.setEnabled(false);
+        jButtonConsultar.setEnabled(false);
+
+    }
 }
