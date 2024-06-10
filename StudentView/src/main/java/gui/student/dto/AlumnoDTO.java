@@ -15,6 +15,17 @@ public class AlumnoDTO {
     private int DNI;
     private String nombre;
     private String apellido;
+    private String estado;
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    
 
     public String getApellido() {
         return apellido;

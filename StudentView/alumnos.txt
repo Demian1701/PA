@@ -1,4 +1,5 @@
-42671687	              Nataly	               Avila	14/06/2000	A
-12345678	            Demian17	         Fioraniiiii	22/01/2024	I
-42671688	           Biancaaaa	            Dellaaaa	14/06/2000	A
-42671689	              Angelo	                Ordo	14/06/2000	I
+42671687	              Nataly	            Avilaaaa	14/06/2000	A
+12345678	            Demian17	           Fioraniii	22/01/2024	A
+42671688	           Biancaaaa	            Dellaaaa	14/06/2000	I
+42671689	           Angeloooo	              Ordooo	16/08/2000	I
+14253678	                Juan	               Perez	05/06/2001	A

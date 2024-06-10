@@ -219,6 +219,17 @@ public class StudentView extends javax.swing.JFrame {
     private void jButtonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCrearActionPerformed
         AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.CREATE);
         alumnoDialog.setVisible(true);
+        try {
+            alumno = AlumnoMapper.dto2Alumno(alumnoDialog.getDto());
+            alumno.setFechaIng(LocalDate.now());
+            dao.create(alumno);
+            jTableAlumnos.setModel(defineAlumnoModel());
+        } catch (PersonaException | DAOException ex) {
+            Logger.getLogger(StudentView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "No se pudo crear el alumno",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        
         System.out.println("");
     }//GEN-LAST:event_jButtonCrearActionPerformed
 
@@ -233,7 +244,7 @@ public class StudentView extends javax.swing.JFrame {
         AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.UPDATE);
         alumnoDialog.setDto(AlumnoMapper.alumno2DTO(alumno));
         alumnoDialog.setVisible(true); //Cuando se cierra esto retoma
-        
+        getAlumnoSeleccionado(rowSelected).getEstado();
         //ver que hace el map
         //Map <String,String> configMap = new HashMap<>();
         //configMap.put(DAOFactory.TIPO_DAO, DAOFactory.TIPO_DAO_TXT);
@@ -276,10 +287,17 @@ public class StudentView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No se ha seleccionado un alumno", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-            Alumno alumno = getAlumnoSeleccionado(rowSelected);
-            int resp = JOptionPane.showConfirmDialog(this, "¿Está seguro que quiere borrar al alumno con DNI: " + alumno.getDni() + " ?"  ,"Confirmación de borrado",JOptionPane.OK_CANCEL_OPTION);
-            if(resp != JOptionPane.OK_OPTION){
-                return;
+            Alumno alumnoABorrar = getAlumnoSeleccionado(rowSelected);
+            int resp = JOptionPane.showConfirmDialog(this, "¿Está seguro que quiere borrar al alumno con DNI: " + alumnoABorrar.getDni() + " ?"  ,"Confirmación de borrado",JOptionPane.OK_CANCEL_OPTION);
+            if(resp == JOptionPane.OK_OPTION){
+                try {
+                    dao.delete((Integer)alumnoABorrar.getDni());
+                    System.out.println("LLEGA A BORRAR");
+                    jTableAlumnos.setModel(defineAlumnoModel());
+                } catch (DAOException ex) {
+                    JOptionPane.showMessageDialog(this, "Error al borrar al alumno", "Error", JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(StudentView.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             System.out.println("Se borra");
         }
@@ -416,10 +434,10 @@ public class StudentView extends javax.swing.JFrame {
     private void fillAlumnosList(Boolean filter) {
         try {
             if(filter){
-                alumnosList = dao.findAll(true);
+                alumnosList = dao.findAllByEstado(true);
             }
             else{
-                alumnosList = dao.findAll(false);
+                alumnosList = dao.findAllByEstado(false);
             }
         } catch (DAOException ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar los alumnos, por favor intente cambiando el input de datos", "Error", JOptionPane.INFORMATION_MESSAGE);

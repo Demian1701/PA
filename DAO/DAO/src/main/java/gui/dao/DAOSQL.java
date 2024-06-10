@@ -116,6 +116,7 @@ public class DAOSQL extends DAO <Alumno, Integer>{
                 alumno.setNombre(rs.getString("nombre"));
                 alumno.setApellido(rs.getString("apellido"));
                 alumno.setFechaNac(AlumnoUtils.sqlDate2LocalDate(rs.getDate("fec_nac")));
+                alumno.setEstado(rs.getString("estado").charAt(0));
                 
                 System.out.println("Alumno: " + alumno);
                 

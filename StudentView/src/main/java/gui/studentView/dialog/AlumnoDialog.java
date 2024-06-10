@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 /**
@@ -23,7 +24,7 @@ public class AlumnoDialog extends javax.swing.JDialog {
     public static final String READ = "READ";
 
     private String currentAction = "";
-
+    
     public String getCurrentAction() {
         return currentAction;
     }
@@ -31,6 +32,8 @@ public class AlumnoDialog extends javax.swing.JDialog {
     public void setCurrentAction(String currentAction) {
         this.currentAction = currentAction;
     }
+    
+    
     
     private AlumnoDTO dto;
 
@@ -113,6 +116,11 @@ public class AlumnoDialog extends javax.swing.JDialog {
         });
 
         jButtonCancel.setText("Cancel");
+        jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCancelActionPerformed(evt);
+            }
+        });
 
         jButtonOK.setText("OK");
         jButtonOK.addActionListener(new java.awt.event.ActionListener() {
@@ -234,6 +242,7 @@ public class AlumnoDialog extends javax.swing.JDialog {
         }
         if(getCurrentAction().equals(AlumnoDialog.UPDATE)){
             jTextFieldDNI.setEditable(false);
+            setCurrentAction(currentAction);
         }
 
     }//GEN-LAST:event_formWindowOpened
@@ -254,8 +263,29 @@ public class AlumnoDialog extends javax.swing.JDialog {
             System.out.println(aaa);
             getDto().setDNI(12345678);
             //dto.setDNI(Integer.parseInt(jTextFieldDNI.getText()));
-
         }
+        if(getCurrentAction().equals(AlumnoDialog.CREATE)){
+            if( jTextFieldDNI.getText() == null || jTextFieldDNI.getText().isEmpty()  ||
+                jTextFieldNombre.getText() == null || jTextFieldNombre.getText().isEmpty() ||
+                jTextFieldApellido.getText() == null || jTextFieldApellido.getText().isEmpty() ||
+                jDateChooserFechaNac.getCalendar() == null){
+            
+                JOptionPane.showMessageDialog(this, "Complete todos los campos antes de crear un alumnis",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+                dto.setDNI(Integer.parseInt(jTextFieldDNI.getText()));
+                dto.setNombre(jTextFieldNombre.getText());
+                dto.setApellido(jTextFieldApellido.getText());
+                Calendar calendar = jDateChooserFechaNac.getCalendar();
+                LocalDate localDate = LocalDateTime.ofInstant(calendar.toInstant(), 
+                calendar.getTimeZone().toZoneId()).toLocalDate();
+                dto.setFecNac(localDate);
+                dto.setEstado("A");
+            }
+            
+        }
+
 
         
         setVisible(false);
@@ -266,6 +296,10 @@ public class AlumnoDialog extends javax.swing.JDialog {
     private void jTextFieldApellidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldApellidoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldApellidoActionPerformed
+
+    private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
+        dispose();
+    }//GEN-LAST:event_jButtonCancelActionPerformed
 
     /**
      * @param args the command line arguments

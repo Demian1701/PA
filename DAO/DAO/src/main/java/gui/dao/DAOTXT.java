@@ -89,6 +89,7 @@ public class DAOTXT extends DAO <Alumno, Integer>{
                 if (dniAlu.equals(alumno.getDni())) {
                     raf.seek(filePointer);
                     raf.writeBytes(alumno.toString());
+                    System.out.println(alumno.toString());
                     return;
                 }
                 filePointer = raf.getFilePointer();
@@ -102,8 +103,12 @@ public class DAOTXT extends DAO <Alumno, Integer>{
 
     @Override
     public void delete(Integer dni) throws DAOException {
-        
+        System.out.println("-----------------------------------");
+        System.out.println(dni);
         Alumno alumno = read(dni);
+        System.out.println("-----------------------------------");
+        System.out.println(alumno.getFechaNac());
+        System.out.println("-----------------------------------");
         alumno.setEstado('I');
         update(alumno);
     }
@@ -173,6 +178,11 @@ public class DAOTXT extends DAO <Alumno, Integer>{
 
     @Override
     public List<Alumno> findAllByEstado(boolean solaActivos) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if(solaActivos == true){
+            return findAll(true);
+        }
+        else{
+            return findAll(false);
+        }
     }
 }

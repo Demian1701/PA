@@ -21,7 +21,7 @@ public final class AlumnoMapper {
         dto.setNombre(al.getNombre());
         dto.setApellido(al.getApellido());
         dto.setFecNac(al.getFechaNac());
-
+        dto.setEstado(String.valueOf(al.getEstado()));
         return dto;
     }
     
@@ -31,6 +31,7 @@ public final class AlumnoMapper {
         al.setNombre(dto.getNombre());
         al.setApellido(dto.getApellido());        
         al.setFechaNac(dto.getFecNac());
+        al.setEstado(dto.getEstado().charAt(0));
         
         return al;
     }
