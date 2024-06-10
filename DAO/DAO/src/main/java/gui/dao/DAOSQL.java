@@ -137,19 +137,29 @@ public class DAOSQL extends DAO <Alumno, Integer>{
 
     @Override
     public void update(Alumno alumno) throws DAOException {
+        Alumno currentAlumno = findById(alumno.getDni());
         
         try {
             int index = 1;
             
-            updatePS.setString(index++, alumno.getNombre());
-            updatePS.setString(index++, alumno.getApellido());
-            updatePS.setDate(index++, AlumnoUtils.localDate2SqlDate(alumno.getFechaNac()));
-            updatePS.setString(index++, String.valueOf(alumno.getEstado()));
-            updatePS.setInt(index++, alumno.getLegajo());
-            updatePS.setInt(index++, alumno.getCantMatAprob());
-            updatePS.setDouble(index++, alumno.getPromedio());
-            updatePS.setDate(index++, AlumnoUtils.localDate2SqlDate(alumno.getFechaIng()));
-            updatePS.setString(index++, String.valueOf(alumno.getCarreras()));
+            updatePS.setString(index++, 
+            alumno.getNombre() != null ? alumno.getNombre() : currentAlumno.getNombre());
+            updatePS.setString(index++, 
+                alumno.getApellido() != null ? alumno.getApellido() : currentAlumno.getApellido());
+            updatePS.setDate(index++, 
+                alumno.getFechaNac() != null ? AlumnoUtils.localDate2SqlDate(alumno.getFechaNac()) : AlumnoUtils.localDate2SqlDate(currentAlumno.getFechaNac()));
+            updatePS.setString(index++, 
+                alumno.getEstado() != '\0' ? String.valueOf(alumno.getEstado()) : String.valueOf(currentAlumno.getEstado()));
+            updatePS.setInt(index++, 
+                alumno.getLegajo() != 0 ? alumno.getLegajo() : currentAlumno.getLegajo());
+            updatePS.setInt(index++, 
+                alumno.getCantMatAprob() != 0 ? alumno.getCantMatAprob() : currentAlumno.getCantMatAprob());
+            updatePS.setDouble(index++, 
+                alumno.getPromedio() != 0 ? alumno.getPromedio() : currentAlumno.getPromedio());
+            updatePS.setDate(index++, 
+                alumno.getFechaIng() != null ? AlumnoUtils.localDate2SqlDate(alumno.getFechaIng()) : AlumnoUtils.localDate2SqlDate(currentAlumno.getFechaIng()));
+            updatePS.setString(index++, 
+                alumno.getCarreras() != null ? String.valueOf(alumno.getCarreras()) : String.valueOf(currentAlumno.getCarreras()));
             updatePS.setInt(index++, alumno.getDni()); // El dni para la condición WHERE
             
             updatePS.execute();

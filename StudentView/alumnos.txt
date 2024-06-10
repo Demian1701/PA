@@ -1,4 +1,4 @@
 42671687	              Nataly	               Avila	14/06/2000	A
 12345678	            Demian17	             Fiorani	22/01/2024	A
-12348765	              Bianca	                D	14/06/2000	I
+12348765	              Bianca	                   D	14/06/2000	A
 12348766	             Angelo1	                  Or	26/10/2005	A

@@ -5,6 +5,7 @@
 package gui.studentView.dialog;
 
 import gui.student.dto.AlumnoDTO;
+import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
@@ -20,6 +21,16 @@ public class AlumnoDialog extends javax.swing.JDialog {
     public static final String UPDATE = "UPDATE";
     public static final String READ = "READ";
 
+    private String currentAction = "";
+
+    public String getCurrentAction() {
+        return currentAction;
+    }
+
+    public void setCurrentAction(String currentAction) {
+        this.currentAction = currentAction;
+    }
+    
     private AlumnoDTO dto;
 
     public AlumnoDTO getDto() {
@@ -60,12 +71,16 @@ public class AlumnoDialog extends javax.swing.JDialog {
      */
     public AlumnoDialog(java.awt.Frame parent, boolean modal, String action) {
         super(parent, modal);
+        setCurrentAction(action);
         initComponents();
         this.setLocationRelativeTo(null);
         this.setTitle("Student dialog");
         
         jButtonCancel.setVisible(!action.equals(READ));
-        jTextFieldDNI.setEnabled(!action.equals(READ));
+        if(action.equals(READ)){
+            jTextFieldDNI.setEnabled(true);
+        }
+        System.out.println(action);
     }
 
     /**
@@ -198,16 +213,19 @@ public class AlumnoDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jTextFieldNombreActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        jTextFieldDNI.setText(String.valueOf(dto.getDNI()));
-        jTextFieldNombre.setText(dto.getNombre());
-        jTextFieldApellido.setText(dto.getApellido());
+        if(!getCurrentAction().equals(AlumnoDialog.READ) && 
+                !getCurrentAction().equals(AlumnoDialog.CREATE)){
+            jTextFieldDNI.setText(String.valueOf(dto.getDNI()));
+            jTextFieldNombre.setText(dto.getNombre());
+            jTextFieldApellido.setText(dto.getApellido());
+            int year = dto.getFecNac().getYear();
+            int month = dto.getFecNac().getMonthValue();
+            int day = dto.getFecNac().getDayOfMonth();
+            Calendar cal = Calendar.getInstance();
+            cal.set(year, month - 1, day);
+            jDateChooserFechaNac.setCalendar(cal);
+        }
 
-        int year = dto.getFecNac().getYear();
-        int month = dto.getFecNac().getMonthValue();
-        int day = dto.getFecNac().getDayOfMonth();
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month - 1, day);
-        jDateChooserFechaNac.setCalendar(cal);
 
     }//GEN-LAST:event_formWindowOpened
 

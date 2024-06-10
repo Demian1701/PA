@@ -230,20 +230,21 @@ public class StudentView extends javax.swing.JFrame {
         }
         Alumno alumno = getAlumnoSeleccionado(rowSelected);
         
-        AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.UPDATE);
+        AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.CREATE);
         alumnoDialog.setDto(AlumnoMapper.alumno2DTO(alumno));
         alumnoDialog.setVisible(true); //Cuando se cierra esto retoma
         
         //ver que hace el map
-        Map <String,String> configMap = new HashMap<>();
-        configMap.put(DAOFactory.TIPO_DAO, DAOFactory.TIPO_DAO_TXT);
-        String fullpath = jTextFieldFullPath.getText();
-        configMap.put(DAOFactory.FULL_PATH, fullpath);
+        //Map <String,String> configMap = new HashMap<>();
+        //configMap.put(DAOFactory.TIPO_DAO, DAOFactory.TIPO_DAO_TXT);
+        //String fullpath = jTextFieldFullPath.getText();
+        //configMap.put(DAOFactory.FULL_PATH, fullpath);
         
         
         try {
             //DAO dao = DAOFactory.getInstance().crearDAO(null);
             alumno = AlumnoMapper.dto2Alumno(alumnoDialog.getDto());
+            alumno.setFechaIng(LocalDate.now());
             dao.update(alumno);
             System.out.println("alumno a persistir ==> "+alumno.getDni() + "- "+alumno.getNombre()+ "- "+alumno.getFechaNac());
             jTableAlumnos.setModel(defineAlumnoModel());

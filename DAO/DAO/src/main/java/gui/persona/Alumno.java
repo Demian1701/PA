@@ -107,7 +107,7 @@ public class Alumno extends Persona {
 
     @Override
     public String toString() {
-        return super.toString() + Persona.DELIM + estado;
+        return super.toString() + Persona.DELIM + getEstado();
     }
     
 }
