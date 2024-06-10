@@ -230,7 +230,7 @@ public class StudentView extends javax.swing.JFrame {
         }
         Alumno alumno = getAlumnoSeleccionado(rowSelected);
         
-        AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.CREATE);
+        AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.UPDATE);
         alumnoDialog.setDto(AlumnoMapper.alumno2DTO(alumno));
         alumnoDialog.setVisible(true); //Cuando se cierra esto retoma
         
