@@ -19,6 +19,7 @@ public final class AlumnoMapper {
         AlumnoDTO dto = new AlumnoDTO();
         dto.setDNI(al.getDni());
         dto.setNombre(al.getNombre());
+        dto.setApellido(al.getApellido());
         dto.setFecNac(al.getFechaNac());
 
         return dto;
@@ -28,6 +29,7 @@ public final class AlumnoMapper {
         Alumno al = new Alumno();
         al.setDni(dto.getDNI());
         al.setNombre(dto.getNombre());
+        al.setApellido(dto.getApellido());        
         al.setFechaNac(dto.getFecNac());
         
         return al;
