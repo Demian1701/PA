@@ -6,10 +6,13 @@ package gui.studentView;
 
 import gui.dao.DAO;
 import gui.dao.DAOException;
+import gui.dao.DAOFactory;
+import gui.dao.DAOFactoryException;
 import gui.dao.DAOSQL;
 import gui.dao.DAOTXT;
 import gui.persona.Alumno;
 import gui.persona.PersonaException;
+import gui.student.mapper.AlumnoMapper;
 import gui.studentView.dialog.AlumnoDialog;
 import java.util.List;
 import java.io.File;
@@ -478,10 +481,24 @@ public class StudentView extends javax.swing.JFrame {
         int rowSelected = jTableAlumnos.getSelectedRow();
         if(rowSelected < 0){
             JOptionPane.showMessageDialog(this, "No se ha seleccionado un alumno", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
-        AlumnoDialog alumnoDIalog = new AlumnoDialog(this, true, AlumnoDialog.UPDATE);
-        alumnoDIalog.setVisible(true);
+        Alumno alumno = getAlumnoSeleccionado(rowSelected);
         
+        AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.UPDATE);
+        alumnoDialog.setDto(AlumnoMapper.alumno2DTO(alumno));
+        alumnoDialog.setVisible(true); //Cuando se cierra esto retoma
+        try {
+            //DAO dao = DAOFactory.getInstance().crearDAO(null);
+            //dao.update(AlumnoMapper.dto2Alumno(alumnoDialog.getDto()));
+            alumno = AlumnoMapper.dto2Alumno(alumnoDialog.getDto());
+            System.out.println("alumno a persistir ==> "+alumno.getDni() + "- "+alumno.getNombre()+ "- "+alumno.getFechaNac());
+
+        //} catch (DAOFactoryException | DAOException | PersonaException ex) {
+        } catch (PersonaException ex) {
+            Logger.getLogger(StudentView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Error al modificar (" + ex.getLocalizedMessage() + ")", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButtonModificarActionPerformed
 
     private void jButtonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultarActionPerformed
@@ -495,9 +512,7 @@ public class StudentView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No se ha seleccionado un alumno", "Error", JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-            AlumnoTableModel alumnoTableModel = (AlumnoTableModel)jTableAlumnos.getModel();
-            java.util.List<Alumno> alumnos = alumnoTableModel.getAlumnos();
-            Alumno alumno = alumnos.get(rowSelected);
+            Alumno alumno = getAlumnoSeleccionado(rowSelected);
             int resp = JOptionPane.showConfirmDialog(this, "¿Está seguro que quiere borrar al alumno con DNI: " + alumno.getDni() + " ?"  ,"Confirmación de borrado",JOptionPane.OK_CANCEL_OPTION);
             if(resp != JOptionPane.OK_OPTION){
                 return;
@@ -505,6 +520,13 @@ public class StudentView extends javax.swing.JFrame {
             System.out.println("Se borra");
         }
     }//GEN-LAST:event_jButtonBorrarActionPerformed
+
+    private Alumno getAlumnoSeleccionado(int rowSelected) {
+        AlumnoTableModel alumnoTableModel = (AlumnoTableModel)jTableAlumnos.getModel();
+        java.util.List<Alumno> alumnos = alumnoTableModel.getAlumnos();
+        Alumno alumno = alumnos.get(rowSelected);
+        return alumno;
+    }
 
     private void jButtonPickerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPickerActionPerformed
         JFileChooser chooser = new JFileChooser();
@@ -527,7 +549,7 @@ public class StudentView extends javax.swing.JFrame {
         else{
             jTextFieldFullPath.setVisible(false);
             jButtonPicker.setVisible(false);
-}
+        }
         
     }//GEN-LAST:event_jComboBoxFeedActionPerformed
 

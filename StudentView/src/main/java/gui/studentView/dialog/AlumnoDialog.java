@@ -4,6 +4,12 @@
  */
 package gui.studentView.dialog;
 
+import gui.student.dto.AlumnoDTO;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import javax.swing.JTextField;
+
 /**
  *
  * @author fiora
@@ -14,6 +20,31 @@ public class AlumnoDialog extends javax.swing.JDialog {
     public static final String UPDATE = "UPDATE";
     public static final String READ = "READ";
 
+    private AlumnoDTO dto;
+
+    public AlumnoDTO getDto() {
+        return dto;
+    }
+
+    public void setDto(AlumnoDTO dto) {
+        this.dto = dto;
+    }
+
+    public JTextField getjTextFieldDNI() {
+        return jTextFieldDNI;
+    }
+
+    public void setjTextFieldDNI(JTextField jTextFieldDNI) {
+        this.jTextFieldDNI = jTextFieldDNI;
+    }
+
+    public JTextField getjTextFieldNombre() {
+        return jTextFieldNombre;
+    }
+
+    public void setjTextFieldNombre(JTextField jTextFieldNombre) {
+        this.jTextFieldNombre = jTextFieldNombre;
+    }
     /**
      * Creates new form AlumnoDialog
      */
@@ -22,6 +53,9 @@ public class AlumnoDialog extends javax.swing.JDialog {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setTitle("Student dialog");
+        
+        jButtonCancel.setVisible(!action.equals(READ));
+        jTextFieldDNI.setEnabled(!action.equals(READ));
     }
 
     /**
@@ -33,21 +67,126 @@ public class AlumnoDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButtonCancel = new javax.swing.JButton();
+        jButtonOK = new javax.swing.JButton();
+        jLabelDNI = new javax.swing.JLabel();
+        jLabelNombre = new javax.swing.JLabel();
+        jTextFieldDNI = new javax.swing.JTextField();
+        jTextFieldNombre = new javax.swing.JTextField();
+        jDateChooserFechaNac = new com.toedter.calendar.JDateChooser();
+        jLabel1 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+
+        jButtonCancel.setText("Cancel");
+
+        jButtonOK.setText("OK");
+        jButtonOK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOKActionPerformed(evt);
+            }
+        });
+
+        jLabelDNI.setText("DNI:");
+
+        jLabelNombre.setText("Nombre:");
+
+        jTextFieldDNI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldDNIActionPerformed(evt);
+            }
+        });
+
+        jTextFieldNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldNombreActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Fecha Nac:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelNombre)
+                    .addComponent(jLabelDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonOK)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonCancel, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
+                    .addComponent(jTextFieldNombre)
+                    .addComponent(jDateChooserFechaNac, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextFieldDNI))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelDNI)
+                            .addComponent(jTextFieldDNI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelNombre)
+                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jDateChooserFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 163, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonOK)
+                    .addComponent(jButtonCancel))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTextFieldDNIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldDNIActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldDNIActionPerformed
+
+    private void jTextFieldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldNombreActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        jTextFieldDNI.setText(String.valueOf(dto.getDNI()));
+        jTextFieldNombre.setText(dto.getNombre());
+        
+        int year = dto.getFecNac().getYear();
+        int month = dto.getFecNac().getMonthValue() - 1;
+        int day = dto.getFecNac().getDayOfMonth();
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day);
+        jDateChooserFechaNac.setCalendar(cal);
+
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
+        dto.setDNI(Integer.valueOf(jTextFieldDNI.getText()));
+        dto.setNombre(jTextFieldNombre.getText());
+        
+        Calendar calendar = jDateChooserFechaNac.getCalendar();
+        LocalDate localDate = LocalDateTime.ofInstant(calendar.toInstant(), 
+                calendar.getTimeZone().toZoneId()).toLocalDate();
+        dto.setFecNac(localDate);
+    }//GEN-LAST:event_jButtonOKActionPerformed
 
     /**
      * @param args the command line arguments
@@ -92,5 +231,13 @@ public class AlumnoDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCancel;
+    private javax.swing.JButton jButtonOK;
+    private com.toedter.calendar.JDateChooser jDateChooserFechaNac;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabelDNI;
+    private javax.swing.JLabel jLabelNombre;
+    private javax.swing.JTextField jTextFieldDNI;
+    private javax.swing.JTextField jTextFieldNombre;
     // End of variables declaration//GEN-END:variables
 }
