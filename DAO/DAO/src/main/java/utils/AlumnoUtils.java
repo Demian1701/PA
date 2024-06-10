@@ -25,6 +25,8 @@ public class AlumnoUtils {
         int month = Integer.valueOf(fechaNacArr[1]);
         int dayOfMonth = Integer.valueOf(fechaNacArr[0]);
         alu.setFechaNac(LocalDate.of(year, month, dayOfMonth));
+        char estado = lineasStr[4].charAt(0);
+        alu.setEstado(estado);
         
         return alu;
     }

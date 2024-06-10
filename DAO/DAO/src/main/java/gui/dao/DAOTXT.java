@@ -38,6 +38,7 @@ public class DAOTXT extends DAO <Alumno, Integer>{
             if (exist(alumno.getDni())) {
                 throw new DAOException("Alumno duplicado ==> " + alumno.getDni());
             }
+            alumno.setEstado('A');
             raf.seek(raf.length()); // Se posiciona al final del archivo
             raf.writeBytes(alumno.toString() + System.lineSeparator());
             
@@ -54,6 +55,7 @@ public class DAOTXT extends DAO <Alumno, Integer>{
             raf.seek(0);
             String lineaAlu;
             Integer dniAlu;
+            System.out.println(raf.readLine());
             while ((lineaAlu = raf.readLine())!= null) {
                 dniAlu = Integer.valueOf(lineaAlu.substring(0, 8));
                 if (dniAlu.equals(dni)) {

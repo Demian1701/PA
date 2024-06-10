@@ -13,7 +13,7 @@ public class Alumno extends Persona {
     private short cantMatAprob;
     private double promedio;
     private LocalDate fechaIng;
-    private char estado = 'A';
+    private char estado;
     private List<Carrera> carreras;
 
         public Alumno(int legajo, short cantMatAprob, double promedio, LocalDate fechaIng,

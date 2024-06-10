@@ -4,6 +4,7 @@
  */
 package gui.studentView.dialog;
 
+import com.toedter.calendar.JCalendar;
 import gui.student.dto.AlumnoDTO;
 import java.awt.Color;
 import java.time.LocalDate;
@@ -80,6 +81,7 @@ public class AlumnoDialog extends javax.swing.JDialog {
         if(action.equals(READ)){
             jTextFieldDNI.setEnabled(true);
         }
+        dto = new AlumnoDTO();
         System.out.println(action);
     }
 
@@ -216,8 +218,8 @@ public class AlumnoDialog extends javax.swing.JDialog {
         if(!getCurrentAction().equals(AlumnoDialog.READ) && 
                 !getCurrentAction().equals(AlumnoDialog.CREATE)){
             jTextFieldDNI.setText(String.valueOf(dto.getDNI()));
-            jTextFieldNombre.setText(dto.getNombre());
-            jTextFieldApellido.setText(dto.getApellido());
+            jTextFieldNombre.setText(dto.getNombre().trim());
+            jTextFieldApellido.setText(dto.getApellido().trim());
             int year = dto.getFecNac().getYear();
             int month = dto.getFecNac().getMonthValue();
             int day = dto.getFecNac().getDayOfMonth();
@@ -225,20 +227,39 @@ public class AlumnoDialog extends javax.swing.JDialog {
             cal.set(year, month - 1, day);
             jDateChooserFechaNac.setCalendar(cal);
         }
-
+        if(getCurrentAction().equals(AlumnoDialog.READ)){
+            jTextFieldNombre.setEnabled(false);
+            jTextFieldApellido.setEnabled(false);
+            jDateChooserFechaNac.setEnabled(false);
+        }
+        if(getCurrentAction().equals(AlumnoDialog.UPDATE)){
+            jTextFieldDNI.setEditable(false);
+        }
 
     }//GEN-LAST:event_formWindowOpened
 
     private void jButtonOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOKActionPerformed
-        dto.setDNI(Integer.valueOf(jTextFieldDNI.getText()));
-        dto.setNombre(jTextFieldNombre.getText());
-        dto.setApellido(jTextFieldApellido.getText());
-        Calendar calendar = jDateChooserFechaNac.getCalendar();
-        LocalDate localDate = LocalDateTime.ofInstant(calendar.toInstant(), 
-                calendar.getTimeZone().toZoneId()).toLocalDate();
-        dto.setFecNac(localDate);
+        if(getCurrentAction().equals(AlumnoDialog.UPDATE)){
+            dto.setDNI(Integer.parseInt(jTextFieldDNI.getText()));
+            dto.setNombre(jTextFieldNombre.getText());
+            dto.setApellido(jTextFieldApellido.getText());
+            Calendar calendar = jDateChooserFechaNac.getCalendar();
+            LocalDate localDate = LocalDateTime.ofInstant(calendar.toInstant(), 
+                    calendar.getTimeZone().toZoneId()).toLocalDate();
+            dto.setFecNac(localDate);
+        }
+        if(getCurrentAction().equals(AlumnoDialog.READ)){
+            System.out.println("LLEGAAAAAAAAAAAAAAAA");
+            String aaa = jTextFieldDNI.getText();
+            System.out.println(aaa);
+            getDto().setDNI(12345678);
+            //dto.setDNI(Integer.parseInt(jTextFieldDNI.getText()));
+
+        }
+
         
         setVisible(false);
+        
 
     }//GEN-LAST:event_jButtonOKActionPerformed
 

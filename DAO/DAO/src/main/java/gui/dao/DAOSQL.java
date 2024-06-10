@@ -83,6 +83,7 @@ public class DAOSQL extends DAO <Alumno, Integer>{
     @Override
     public void create(Alumno alumno) throws DAOException {
         try {
+            alumno.setEstado('A');
             int index = 1;
             insertPS.setInt(index++, alumno.getDni());
             insertPS.setString(index++, alumno.getNombre());

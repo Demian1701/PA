@@ -256,8 +256,18 @@ public class StudentView extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonModificarActionPerformed
 
     private void jButtonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultarActionPerformed
-        AlumnoDialog alumnoDIalog = new AlumnoDialog(this, true, AlumnoDialog.READ);
-        alumnoDIalog.setVisible(true);
+        AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.READ);
+        alumnoDialog.setVisible(true);
+        try {
+            List<Alumno> alumnosBuscados = new ArrayList();
+            Alumno alumnoBuscado = (Alumno) dao.findById(alumnoDialog.getDto().getDNI());
+            alumnosBuscados.add(alumnoBuscado);
+            AlumnoTableModel alumnoModel = new AlumnoTableModel();
+            alumnoModel.setAlumnos(alumnosBuscados);    
+            jTableAlumnos.setModel(alumnoModel);
+        } catch (DAOException ex) {
+            Logger.getLogger(StudentView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonConsultarActionPerformed
 
     private void jButtonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBorrarActionPerformed
