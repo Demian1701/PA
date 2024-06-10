@@ -271,13 +271,21 @@ public class StudentView extends javax.swing.JFrame {
         alumnoDialog.setVisible(true);
         try {
             List<Alumno> alumnosBuscados = new ArrayList();
+            System.out.println("DNI BUSCADO: " + alumnoDialog.getDto().getDNI());
             Alumno alumnoBuscado = (Alumno) dao.findById(alumnoDialog.getDto().getDNI());
+            if(alumnoBuscado == null){
+                JOptionPane.showMessageDialog(this, "No se ha encontrado al alumno con ese DNI",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+            System.out.println("Alumno buscado: " + alumnoBuscado.getNombre());
             alumnosBuscados.add(alumnoBuscado);
             AlumnoTableModel alumnoModel = new AlumnoTableModel();
             alumnoModel.setAlumnos(alumnosBuscados);    
             jTableAlumnos.setModel(alumnoModel);
         } catch (DAOException ex) {
             Logger.getLogger(StudentView.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "No se ha encontrado al alumno con ese DNI",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButtonConsultarActionPerformed
 

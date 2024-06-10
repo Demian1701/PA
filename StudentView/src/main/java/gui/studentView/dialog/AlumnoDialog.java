@@ -258,11 +258,21 @@ public class AlumnoDialog extends javax.swing.JDialog {
             dto.setFecNac(localDate);
         }
         if(getCurrentAction().equals(AlumnoDialog.READ)){
-            System.out.println("LLEGAAAAAAAAAAAAAAAA");
-            String aaa = jTextFieldDNI.getText();
-            System.out.println(aaa);
-            getDto().setDNI(12345678);
-            //dto.setDNI(Integer.parseInt(jTextFieldDNI.getText()));
+            if( jTextFieldDNI.getText() == null || jTextFieldDNI.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Por favor complete el campo DNI",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+                String dniText = jTextFieldDNI.getText();
+                if (isNumeric(dniText)) {
+                    int dni = Integer.valueOf(dniText);
+                    dto.setDNI(dni);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Por favor ingrese solo numeros en el campo DNI",
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
         }
         if(getCurrentAction().equals(AlumnoDialog.CREATE)){
             if( jTextFieldDNI.getText() == null || jTextFieldDNI.getText().isEmpty()  ||
@@ -301,6 +311,14 @@ public class AlumnoDialog extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
+    public boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
     /**
      * @param args the command line arguments
      */
