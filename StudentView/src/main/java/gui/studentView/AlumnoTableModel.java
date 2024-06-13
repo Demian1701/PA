@@ -19,7 +19,8 @@ public class AlumnoTableModel extends AbstractTableModel {
     public List<Alumno> getAlumnos() {
         return alumnos;
     }
-    private static final String[] COLUMNAS = {"DNI","NOMBRE","APELLIDO","FEC. NAC.","Estado"};
+private static final String[] COLUMNAS = {"DNI","NOMBRE","APELLIDO","FEC. NAC.","Est","Leg", 
+    "Cant Mat Aprob", "Prom", "Fec. Ing.", "Carreras"};
 
     public void setAlumnos(List<Alumno> alumnos) {
         this.alumnos = alumnos;
@@ -35,7 +36,7 @@ public class AlumnoTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 5;
+        return 9;
     }
 
     @Override
@@ -49,6 +50,11 @@ public class AlumnoTableModel extends AbstractTableModel {
             case 2: return alumno.getApellido();
             case 3: return alumno.getFechaNac().format(formatter);
             case 4: return alumno.getEstado();
+            case 5: return alumno.getLegajo();
+            case 6: return alumno.getCantMatAprob();
+            case 7: return alumno.getPromedio();
+            case 8: return alumno.getFechaIng();
+            case 9: return alumno.getCarreras();
         }
         return null;
     }

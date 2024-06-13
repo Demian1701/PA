@@ -7,7 +7,6 @@ package gui.student.mapper;
 import gui.persona.Alumno;
 import gui.persona.PersonaException;
 import gui.student.dto.AlumnoDTO;
-import java.time.LocalDate;
 
 /**
  *
@@ -22,6 +21,10 @@ public final class AlumnoMapper {
         dto.setApellido(al.getApellido());
         dto.setFecNac(al.getFechaNac());
         dto.setEstado(String.valueOf(al.getEstado()));
+        dto.setLegajo(al.getLegajo());
+        dto.setCantMatAprob(al.getCantMatAprob());
+        dto.setPromedio(al.getPromedio());
+        dto.setFecIng(al.getFechaIng());
         return dto;
     }
     
@@ -32,7 +35,10 @@ public final class AlumnoMapper {
         al.setApellido(dto.getApellido());        
         al.setFechaNac(dto.getFecNac());
         al.setEstado(dto.getEstado().charAt(0));
-        
+        al.setLegajo(dto.getLegajo());
+        al.setCantMatAprob((short) dto.getCantMatAprob());
+        al.setPromedio(dto.getPromedio());
+        al.setFechaIng(dto.getFecIng());
         return al;
     }
 }

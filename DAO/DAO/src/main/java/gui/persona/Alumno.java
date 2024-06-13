@@ -107,7 +107,11 @@ public class Alumno extends Persona {
 
     @Override
     public String toString() {
-        return super.toString() + Persona.DELIM + getEstado();
+        return super.toString() + 
+                String.format("%c%04d%c%02d%c%5.2f%c%02d/%02d/%04d%c%c", Persona.DELIM, 
+                        getLegajo(), Persona.DELIM, getCantMatAprob(), Persona.DELIM, getPromedio(), 
+                        Persona.DELIM, this.fechaIng.getDayOfMonth(), this.fechaIng.getMonthValue(), 
+                        this.fechaIng.getYear(), Persona.DELIM, getEstado());
     }
     
 }

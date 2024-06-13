@@ -127,15 +127,15 @@ public class DAOTXT extends DAO <Alumno, Integer>{
             raf.seek(0);
             String lineaAlu;
             while ((lineaAlu = raf.readLine())!= null) {
-                if (soloActivos == true && lineaAlu.trim().endsWith("A")) {
+                if (soloActivos && lineaAlu.trim().endsWith("A")) {
                     alumnos.add(AlumnoUtils.str2Alu(lineaAlu));
                     System.out.println(AlumnoUtils.str2Alu(lineaAlu));
                 }
-                if (soloActivos == false && lineaAlu.trim().endsWith("I")) {
+                else if (!soloActivos && lineaAlu.trim().endsWith("I")) {
                     alumnos.add(AlumnoUtils.str2Alu(lineaAlu));
                     System.out.println(AlumnoUtils.str2Alu(lineaAlu));
                 }
-            };
+            }
             
         } catch (IOException ex) {
             Logger.getLogger(DAOTXT.class.getName()).log(Level.SEVERE, null, ex);
@@ -157,7 +157,10 @@ public class DAOTXT extends DAO <Alumno, Integer>{
             String lineaAlu;
             Integer dniAlu;
             while ((lineaAlu = raf.readLine())!= null) {
+                System.out.println("LINEAALU"+lineaAlu.substring(0, 8));
                 dniAlu = Integer.valueOf(lineaAlu.substring(0, 8));
+                System.out.println("DNIALU:" + dniAlu);
+                System.out.println("DNI:" + dni);
                 if (dniAlu.equals(dni)) {
                     return true;
                 }

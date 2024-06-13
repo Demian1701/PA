@@ -4,7 +4,9 @@
  */
 package gui.student.dto;
 
+import gui.persona.Carrera;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -16,6 +18,52 @@ public class AlumnoDTO {
     private String nombre;
     private String apellido;
     private String estado;
+    private LocalDate fecNac;
+    private int Legajo;
+    private short cantMatAprob;
+    private double promedio;
+    private LocalDate fecIng;
+    private List<Carrera> Carreras;
+
+    public int getLegajo() {
+        return Legajo;
+    }
+
+    public void setLegajo(int Legajo) {
+        this.Legajo = Legajo;
+    }
+
+    public int getCantMatAprob() {
+        return cantMatAprob;
+    }
+
+    public void setCantMatAprob(short cantMatAprob) {
+        this.cantMatAprob = cantMatAprob;
+    }
+
+    public double getPromedio() {
+        return promedio;
+    }
+
+    public void setPromedio(double promedio) {
+        this.promedio = promedio;
+    }
+
+    public LocalDate getFecIng() {
+        return fecIng;
+    }
+
+    public void setFecIng(LocalDate fecIng) {
+        this.fecIng = fecIng;
+    }
+
+    public List<Carrera> getCarreras() {
+        return Carreras;
+    }
+
+    public void setCarreras(List<Carrera> Carreras) {
+        this.Carreras = Carreras;
+    }
 
     public String getEstado() {
         return estado;
@@ -25,8 +73,6 @@ public class AlumnoDTO {
         this.estado = estado;
     }
 
-    
-
     public String getApellido() {
         return apellido;
     }
@@ -34,7 +80,6 @@ public class AlumnoDTO {
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
-    private LocalDate fecNac;
 
     public LocalDate getFecNac() {
         return fecNac;
